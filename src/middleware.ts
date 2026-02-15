@@ -1,13 +1,19 @@
-import { auth } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isOnRoom = req.nextUrl.pathname.startsWith("/room");
+export function middleware(request: NextRequest) {
+  const sessionToken =
+    request.cookies.get("authjs.session-token")?.value ||
+    request.cookies.get("__Secure-authjs.session-token")?.value;
 
-  if (isOnRoom && !isLoggedIn) {
-    return Response.redirect(new URL("/login", req.nextUrl));
+  const isOnRoom = request.nextUrl.pathname.startsWith("/room");
+
+  if (isOnRoom && !sessionToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-});
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/room/:path*"],
