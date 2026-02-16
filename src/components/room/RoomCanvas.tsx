@@ -1,51 +1,33 @@
 "use client";
 
-import { Furniture } from "./Furniture";
-import { Window } from "./Window";
-import { DeskLamp } from "./DeskLamp";
-import { Candle } from "./Candle";
-import { FairyLights } from "./FairyLights";
+import { CozyRoomSVG } from "./CozyRoomSVG";
 import { ParticleOverlay } from "./ParticleOverlay";
+import { RainOverlay } from "./RainOverlay";
 
 export default function RoomCanvas() {
   return (
     <div className="fixed inset-0 w-screen h-screen bg-stone-950 overflow-hidden">
-      {/* Background ambient gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-stone-950 via-stone-900/80 to-stone-950" />
-
-      {/* Room elements layered by z-index */}
-      {/* Background layer: walls and furniture */}
-      <div className="absolute inset-0 z-0">
-        <Furniture />
+      {/* Pixel art room — small viewBox scaled up with crisp rendering */}
+      <div className="absolute inset-0" style={{ imageRendering: "pixelated" }}>
+        <CozyRoomSVG />
       </div>
 
-      {/* Window layer */}
-      <div className="absolute inset-0 z-[1]">
-        <Window />
-      </div>
-
-      {/* Furniture lighting */}
+      {/* Rain overlay */}
       <div className="absolute inset-0 z-[2]">
-        <DeskLamp />
-        <Candle />
+        <RainOverlay />
       </div>
 
-      {/* Fairy lights overlay */}
+      {/* Dust / particle overlay */}
       <div className="absolute inset-0 z-[3]">
-        <FairyLights />
-      </div>
-
-      {/* Particle overlay */}
-      <div className="absolute inset-0 z-[4]">
         <ParticleOverlay />
       </div>
 
       {/* Vignette effect */}
       <div
-        className="absolute inset-0 z-[5] pointer-events-none"
+        className="absolute inset-0 z-[4] pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 50%, rgba(12,10,9,0.6) 100%)",
+            "radial-gradient(ellipse at center, transparent 40%, rgba(12,10,9,0.5) 100%)",
         }}
       />
     </div>

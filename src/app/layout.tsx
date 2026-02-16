@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Nunito, JetBrains_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -22,7 +22,16 @@ export const metadata: Metadata = {
   title: "Komorebi — Virtual Cozy Room",
   description:
     "Your virtual cozy room for focus, relaxation, and productivity. Ambient sounds, Pomodoro timer, and beautiful aesthetics.",
-  keywords: ["study room", "focus", "pomodoro", "ambient sounds", "cozy"],
+  keywords: ["study room", "focus", "pomodoro", "ambient sounds", "cozy", "lo-fi"],
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#0c0a09",
 };
 
 export default function RootLayout({

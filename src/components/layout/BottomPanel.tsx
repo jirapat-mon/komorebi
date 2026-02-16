@@ -1,15 +1,33 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import { Music, Timer, ListTodo, ChevronDown } from "lucide-react";
+import { Music, Timer, ListTodo, Palette, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import PomodoroTimer from "@/components/timer/PomodoroTimer";
 import TodoList from "@/components/todo/TodoList";
+import { RoomCustomizer } from "@/components/room/RoomCustomizer";
 
-type Tab = "sound" | "timer" | "todo";
+const SoundPanel = dynamic(
+  () =>
+    import("@/components/sound/SoundPanel").then((mod) => ({
+      default: mod.SoundPanel,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="text-center text-sm text-stone-500 py-8">
+        Loading sounds...
+      </div>
+    ),
+  }
+);
+
+type Tab = "sound" | "timer" | "todo" | "room";
 
 const tabs: { id: Tab; label: string; icon: typeof Music }[] = [
+  { id: "room", label: "Room", icon: Palette },
   { id: "sound", label: "Sound", icon: Music },
   { id: "timer", label: "Timer", icon: Timer },
   { id: "todo", label: "Todo", icon: ListTodo },
@@ -30,7 +48,7 @@ export default function BottomPanel() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 flex flex-col items-center pointer-events-none">
-      <div className="w-full md:max-w-lg pointer-events-auto">
+      <div className="w-full sm:max-w-md md:max-w-lg pointer-events-auto">
         {/* Collapse button */}
         <AnimatePresence>
           {expanded && (
@@ -57,12 +75,9 @@ export default function BottomPanel() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden bg-stone-900/95 backdrop-blur-md border-t border-stone-800/50 rounded-t-2xl"
             >
-              <div className="px-4 py-3 max-h-[60vh] overflow-y-auto">
-                {activeTab === "sound" && (
-                  <div className="text-center text-sm text-stone-500 py-8">
-                    Sound controls coming soon...
-                  </div>
-                )}
+              <div className="px-3 sm:px-4 py-3 max-h-[55vh] sm:max-h-[60vh] overflow-y-auto">
+                {activeTab === "room" && <RoomCustomizer />}
+                {activeTab === "sound" && <SoundPanel />}
                 {activeTab === "timer" && <PomodoroTimer />}
                 {activeTab === "todo" && <TodoList />}
               </div>
@@ -71,7 +86,7 @@ export default function BottomPanel() {
         </AnimatePresence>
 
         {/* Tab bar */}
-        <div className="flex items-center justify-around bg-stone-900/95 backdrop-blur-md border-t border-stone-800/50 px-4 py-2">
+        <div className="flex items-center justify-around bg-stone-900/95 backdrop-blur-md border-t border-stone-800/50 px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id && expanded;
@@ -80,7 +95,7 @@ export default function BottomPanel() {
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 className={cn(
-                  "flex flex-col items-center gap-1 px-4 py-1.5 rounded-lg transition-colors min-w-[64px]",
+                  "flex flex-col items-center gap-0.5 sm:gap-1 px-3 sm:px-4 py-1.5 rounded-lg transition-colors min-w-[56px] sm:min-w-[64px]",
                   isActive
                     ? "text-amber-500"
                     : "text-stone-500 hover:text-stone-300"

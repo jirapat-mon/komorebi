@@ -1,18 +1,24 @@
-export type TimerMode = "work" | "break";
+export type TimerMode = "work" | "break" | "longBreak";
+export type TimerPreset = "classic" | "long" | "custom" | "stopwatch";
 
 export interface TimerConfig {
   workDuration: number; // in seconds
   breakDuration: number; // in seconds
+  longBreakDuration: number; // in seconds
+  longBreakInterval: number; // every N sessions
+  autoStart: boolean;
 }
 
-export interface TimerState {
-  mode: TimerMode;
-  timeLeft: number;
-  isRunning: boolean;
-  sessionsCompleted: number;
-  todayMinutes: number;
+export interface FocusStats {
+  daily: Record<string, number>; // date -> minutes
+  streak: number;
+  longestStreak: number;
+  lastActiveDate: string;
+  totalSessions: number;
+  totalMinutes: number;
 }
 
+// Keep existing Todo interface here for now (will be moved later)
 export interface Todo {
   id: string;
   text: string;

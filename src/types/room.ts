@@ -32,3 +32,19 @@ export interface RoomTheme {
   ambientColor: string;
   elements: RoomElement[];
 }
+
+export type ColorPalette = {
+  id: string;
+  name: string;
+  wall: string;
+  floor: string;
+  accent: string;
+};
+
+export interface RoomLayout {
+  id: string;
+  name: string;
+  themeId: string;
+  paletteId?: string;
+  savedAt: string;
+}
